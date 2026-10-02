@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders</title>
+</head>
+<body>
+    <h2>My Orders</h2>
+    <a th:href="@{/restaurants}">Restaurants</a> | <a th:href="@{/home}">Home</a> | <a th:href="@{/logout}">Logout</a>
+    <hr>
+    <p style="color:green" th:if="${param.placed}">Order placed successfully!</p>
+    <p th:if="${#lists.isEmpty(orders)}">You have no orders yet.</p>
+
+    <div th:each="o : ${orders}" style="border:1px solid #999; padding:10px; margin-bottom:15px">
+        <b>Order #<span th:text="${o.id}"></span></b> |
+        <span th:text="${#dates.format(o.createdAt, 'dd-MMM-yyyy HH:mm')}"></span> |
+        Status: <b th:text="${o.status}"></b>
+        <table border="1" cellpadding="6" style="margin-top:8px">
+            <tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr>
+            <tr th:each="i : ${o.items}">
+                <td th:text="${i.name}"></td>
+                <td th:text="${i.price}"></td>
+                <td th:text="${i.quantity}"></td>
+                <td th:text="${i.subtotal}"></td>
+            </tr>
+        </table>
+        <p>Total: Rs. <b th:text="${o.total}"></b></p>
+    </div>
+</body>
+</html>

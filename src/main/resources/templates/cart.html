@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+</head>
+<body>
+    <h2>Your Cart</h2>
+    <a th:href="@{/restaurants}">Restaurants</a> | <a th:href="@{/orders}">My Orders</a> |
+    <a th:href="@{/home}">Home</a> | <a th:href="@{/logout}">Logout</a>
+    <hr>
+
+    <p style="color:red" th:if="${error}" th:text="${error}"></p>
+    <p style="color:red" th:if="${param.otherRestaurant}">
+        Your cart has items from another restaurant. Clear the cart first to order from a different one.
+    </p>
+
+    <p th:if="${#lists.isEmpty(items)}">Your cart is empty.</p>
+
+    <div th:unless="${#lists.isEmpty(items)}">
+        <table border="1" cellpadding="8">
+            <tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+            <tr th:each="c : ${items}">
+                <td th:text="${c.name}"></td>
+                <td th:text="${c.price}"></td>
+                <td th:text="${c.quantity}"></td>
+                <td th:text="${c.subtotal}"></td>
+                <td>
+                    <form th:action="@{/cart/remove}" method="post">
+                        <input type="hidden" name="foodItemId" th:value="${c.foodItemId}">
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+        <h3>Total: Rs. <span th:text="${total}"></span></h3>
+
+        <form th:action="@{/orders/place}" method="post" style="display:inline">
+            <button type="submit">Place Order</button>
+        </form>
+        <form th:action="@{/cart/clear}" method="post" style="display:inline">
+            <button type="submit">Clear cart</button>
+        </form>
+    </div>
+</body>
+</html>

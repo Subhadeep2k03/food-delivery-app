@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurants</title>
+</head>
+<body>
+    <h2>Restaurants</h2>
+       <a th:href="@{/home}">Home</a> | <a th:href="@{/cart}">Cart</a> | <a th:href="@{/logout}">Logout</a>
+    <hr>
+    <p th:if="${#lists.isEmpty(restaurants)}">No restaurants yet.</p>
+    <table border="1" cellpadding="8" th:unless="${#lists.isEmpty(restaurants)}">
+        <tr>
+            <th>Name</th>
+            <th>Cuisine</th>
+            <th>Address</th>
+            <th></th>
+        </tr>
+        <tr th:each="r : ${restaurants}">
+            <td th:text="${r.name}"></td>
+            <td th:text="${r.cuisine}"></td>
+            <td th:text="${r.address}"></td>
+            <td><a th:href="@{/restaurants/{id}(id=${r.id})}">View Menu</a></td>
+        </tr>
+    </table>
+</body>
+</html>

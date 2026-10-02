@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+</head>
+<body>
+    <h2 th:text="${restaurant.name}">Restaurant</h2>
+    <p><span th:text="${restaurant.cuisine}"></span> | <span th:text="${restaurant.address}"></span></p>
+    <a th:href="@{/restaurants}">Back to restaurants</a> |
+    <a th:href="@{/cart}">View Cart</a> |
+    <a th:href="@{/logout}">Logout</a>
+    <hr>
+
+    <p th:if="${#lists.isEmpty(items)}">No items available.</p>
+
+    <table border="1" cellpadding="8" th:unless="${#lists.isEmpty(items)}">
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.name}"></td>
+            <td th:text="${'Rs. ' + #numbers.formatDecimal(item.price, 1, 2)}"></td>
+            <td>
+                <form th:action="@{/cart/add}" method="post">
+                    <input type="hidden" name="foodItemId" th:value="${item.id}">
+                    <input type="number" name="quantity" value="1" min="1" max="20" style="width:50px">
+                    <button type="submit">Add to cart</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

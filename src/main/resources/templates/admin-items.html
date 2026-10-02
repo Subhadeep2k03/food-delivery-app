@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Menu</title>
+</head>
+<body>
+    <h2>Menu: <span th:text="${restaurant.name}"></span></h2>
+    <a th:href="@{/admin/restaurants}">Back</a> | <a th:href="@{/logout}">Logout</a>
+    <hr>
+    <h3>Add food item</h3>
+    <form th:action="@{/admin/restaurants/{id}/items(id=${restaurant.id})}" method="post">
+        <input type="text" name="name" placeholder="Item name" required>
+        <input type="number" name="price" step="0.01" min="0" placeholder="Price" required>
+        <button type="submit">Add</button>
+    </form>
+    <hr>
+    <table border="1" cellpadding="8">
+        <tr><th>Item</th><th>Price</th><th>Status</th><th></th></tr>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.name}"></td>
+            <td th:text="${item.price}"></td>
+            <td th:text="${item.available} ? 'Available' : 'Hidden'"></td>
+            <td>
+                <form th:action="@{/admin/items/{id}/toggle(id=${item.id})}" method="post">
+                    <input type="hidden" name="restaurantId" th:value="${restaurant.id}">
+                    <button type="submit" th:text="${item.available} ? 'Hide' : 'Show'"></button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

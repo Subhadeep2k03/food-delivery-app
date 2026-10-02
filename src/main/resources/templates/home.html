@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h2>Welcome, <span th:text="${user.name}">User</span>!</h2>
+    <p>Email: <span th:text="${user.email}"></span></p>
+
+    <a th:href="@{/restaurants}">View Restaurants</a> |
+    <a th:href="@{/cart}">Cart</a> |
+    <a th:href="@{/orders}">My Orders</a> |
+    <span th:if="${user.role == 'ADMIN'}">
+        <a th:href="@{/admin/restaurants}">Admin Panel</a> |
+        <a th:href="@{/admin/orders}">All Orders</a> |
+    </span>
+    <a th:href="@{/logout}">Logout</a>
+</body>
+</html>

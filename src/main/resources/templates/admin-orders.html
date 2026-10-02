@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Orders</title>
+</head>
+<body>
+    <h2>Admin: All Orders</h2>
+    <a th:href="@{/admin/restaurants}">Restaurants</a> | <a th:href="@{/home}">Home</a> |
+    <a th:href="@{/logout}">Logout</a>
+    <hr>
+    <p th:if="${#lists.isEmpty(orders)}">No orders yet.</p>
+
+    <div th:each="o : ${orders}" style="border:1px solid #999; padding:10px; margin-bottom:15px">
+        <b>Order #<span th:text="${o.id}"></span></b> |
+        Customer: <span th:text="${o.userName}"></span> |
+        <span th:text="${#dates.format(o.createdAt, 'dd-MMM-yyyy HH:mm')}"></span>
+
+        <table border="1" cellpadding="6" style="margin-top:8px">
+            <tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr>
+            <tr th:each="i : ${o.items}">
+                <td th:text="${i.name}"></td>
+                <td th:text="${i.price}"></td>
+                <td th:text="${i.quantity}"></td>
+                <td th:text="${i.subtotal}"></td>
+            </tr>
+        </table>
+
+        <p>Total: Rs. <b th:text="${o.total}"></b></p>
+
+        <form th:action="@{/admin/orders/{id}/status(id=${o.id})}" method="post">
+            Status:
+            <select name="status">
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                        th:selected="${s == o.status}"></option>
+            </select>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+</body>
+</html>
