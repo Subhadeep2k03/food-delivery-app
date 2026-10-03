@@ -8,6 +8,7 @@
     <h2>Admin: Restaurants</h2>
         <a th:href="@{/home}">Home</a> | <a th:href="@{/admin/orders}">All Orders</a> | <a th:href="@{/logout}">Logout</a>
     <hr>
+        <p style="color:red" th:if="${error}" th:text="${error}"></p>
     <h3>Add restaurant</h3>
     <form th:action="@{/admin/restaurants}" method="post">
         <input type="text" name="name" placeholder="Name" required>

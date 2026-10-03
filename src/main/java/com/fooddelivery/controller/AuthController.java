@@ -35,8 +35,11 @@ public class AuthController {
                            @RequestParam String email,
                            @RequestParam String password,
                            Model model) {
-        if (!userService.register(name, email, password)) {
-            model.addAttribute("error", "This email is already registered");
+        String error = userService.register(name, email, password);
+        if (error != null) {
+            model.addAttribute("error", error);
+            model.addAttribute("name", name);    // keep what the user typed
+            model.addAttribute("email", email);
             return "register";
         }
         return "redirect:/login?registered";
@@ -57,7 +60,7 @@ public class AuthController {
             model.addAttribute("error", "Invalid email or password");
             return "login";
         }
-        user.setPassword(null); // never keep the password hash in the session
+        user.setPassword(null);
         session.setAttribute("loggedInUser", user);
         return "redirect:/home";
     }
