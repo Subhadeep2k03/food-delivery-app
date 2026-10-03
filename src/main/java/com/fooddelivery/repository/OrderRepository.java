@@ -89,4 +89,12 @@ public class OrderRepository {
     public void updateStatus(Long orderId, String status) {
         jdbcTemplate.update("UPDATE orders SET status = ? WHERE id = ?", status, orderId);
     }
+    // cancels only if the order belongs to this user AND is still PLACED
+    // returns 1 if the order was cancelled, 0 if not
+    public int cancelIfPlaced(Long orderId, Long userId) {
+        return jdbcTemplate.update(
+            "UPDATE orders SET status = 'CANCELLED' "
+          + "WHERE id = ? AND user_id = ? AND status = 'PLACED'",
+            orderId, userId);
+    }
 }

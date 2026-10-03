@@ -6,15 +6,21 @@
 </head>
 <body>
     <h2>My Orders</h2>
-    <a th:href="@{/restaurants}">Restaurants</a> | <a th:href="@{/home}">Home</a> | <a th:href="@{/logout}">Logout</a>
+    <a th:href="@{/restaurants}">Restaurants</a> | <a th:href="@{/cart}">Cart</a> |
+    <a th:href="@{/home}">Home</a> | <a th:href="@{/logout}">Logout</a>
     <hr>
+
     <p style="color:green" th:if="${param.placed}">Order placed successfully!</p>
+    <p style="color:green" th:if="${param.cancelled}">Order cancelled.</p>
+    <p style="color:red" th:if="${error}" th:text="${error}"></p>
+
     <p th:if="${#lists.isEmpty(orders)}">You have no orders yet.</p>
 
     <div th:each="o : ${orders}" style="border:1px solid #999; padding:10px; margin-bottom:15px">
         <b>Order #<span th:text="${o.id}"></span></b> |
         <span th:text="${#dates.format(o.createdAt, 'dd-MMM-yyyy HH:mm')}"></span> |
         Status: <b th:text="${o.status}"></b>
+
         <table border="1" cellpadding="6" style="margin-top:8px">
             <tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr>
             <tr th:each="i : ${o.items}">
@@ -24,7 +30,12 @@
                 <td th:text="${i.subtotal}"></td>
             </tr>
         </table>
+
         <p>Total: Rs. <b th:text="${o.total}"></b></p>
+
+        <form th:if="${o.status == 'PLACED'}" th:action="@{/orders/{id}/cancel(id=${o.id})}" method="post">
+            <button type="submit">Cancel order</button>
+        </form>
     </div>
 </body>
 </html>

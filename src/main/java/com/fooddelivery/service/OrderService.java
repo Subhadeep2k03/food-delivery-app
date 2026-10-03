@@ -82,4 +82,7 @@ public class OrderService {
         }
         orderRepository.updateStatus(orderId, status);
     }
+    public boolean cancelOrder(Long orderId, Long userId) {
+        return orderRepository.cancelIfPlaced(orderId, userId) == 1;
+    }
 }
